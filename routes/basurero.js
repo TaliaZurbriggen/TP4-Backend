@@ -1,16 +1,13 @@
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const express = require('express');
 const router = express.Router();
-const fetch = require('node-fetch'); 
 const { Basurero } = require('../models');
-
 
 router.get('/datos-sheet', async (req, res) => {
   try {
-    
     const response = await fetch('URL_DE_GOOGLE_APPS_SCRIPT');
-    const data = await response.json(); 
+    const data = await response.json();
 
-    
     for (let basurero of data) {
       const { estado, fechaActualizacion } = basurero;
 
