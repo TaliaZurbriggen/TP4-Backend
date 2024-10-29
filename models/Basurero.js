@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     fecha: {
       type: DataTypes.DATE,
       allowNull: false
-    }
+    }    
   }, {
     tableName: 'basurero',
     timestamps: false
