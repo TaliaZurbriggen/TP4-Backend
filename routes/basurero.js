@@ -5,7 +5,7 @@ const { Basurero } = require('../models');
 
 router.get('/datos-sheet', async (req, res) => {
   try {
-    const response = await fetch('URL_DE_GOOGLE_APPS_SCRIPT');
+    const response = await fetch('https://script.google.com/macros/s/AKfycbwGu9CxFjdYhBeB_9Cz_fawCGw9WCjSGZ0Yz--dObAKRBF-Y-j5z8_0OxXvY2houpCm1g/exec');
     const data = await response.json();
 
     for (let basurero of data) {
