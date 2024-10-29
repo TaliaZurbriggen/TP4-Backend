@@ -11,20 +11,28 @@ router.get('/datos-sheet', async (req, res) => {
     console.log("Datos recibidos de la API de Google:", data);
 
     for (let basurero of data) {
-      const fecha = new Date(basurero.fecha);
-      const distanciaPromedio = parseFloat(basurero.distancia_promedio);
+      const { fecha, distancia_promedio } = basurero;
 
-      const existingRecord = await Basurero.findOne({
-        where: { fecha: fecha }
-      });
+      // Verifica los datos recibidos con interpolación correcta
+      console.log(`Fecha: ${fecha}, Distancia Promedio: ${distancia_promedio}`);
 
-      if (existingRecord) {
-        await existingRecord.update({ distancia_promedio: distanciaPromedio });
-      } else {
-        await Basurero.create({
-          distancia_promedio: distanciaPromedio,
-          fecha: fecha
-        });
+      // Convertir distancia_promedio a número (de string a float)
+      const distanciaPromedioNumerica = parseFloat(distancia_promedio);
+
+      const basureroExistente = await Basurero.findOne({ where: { fecha } });
+
+      if (!basureroExistente) {
+        // Validar que distanciaPromedioNumerica es un número válido
+        if (!isNaN(distanciaPromedioNumerica)) {
+          try {
+            await Basurero.create({ fecha, distancia_promedio: distanciaPromedioNumerica });
+            console.log(`Registro insertado: Fecha: ${fecha}, Distancia Promedio: ${distanciaPromedioNumerica}`);
+          } catch (insertError) {
+            console.error('Error al insertar en la base de datos:', insertError);
+          }
+        } else {
+          console.error(`Distancia promedio no válida para la fecha ${fecha}: ${distancia_promedio}`);
+        }
       }
     }
 
@@ -34,8 +42,7 @@ router.get('/datos-sheet', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener datos o guardar en la base de datos' });
   }
 });
-s
-
 
 module.exports = router;
+
 
