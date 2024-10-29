@@ -5,16 +5,18 @@ const { Basurero } = require('../models');
 
 router.get('/datos-sheet', async (req, res) => {
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbwGu9CxFjdYhBeB_9Cz_fawCGw9WCjSGZ0Yz--dObAKRBF-Y-j5z8_0OxXvY2houpCm1g/exec');
+    const response = await fetch('https://script.google.com/macros/s/AKfycbyTdMBSUv8lFQEf2sNnLDbHXVITURXDOex3FxXIg3C9vXkGdgWX1cUFHjDkr5tCbqrrmg/exec');
     const data = await response.json();
 
-    for (let basurero of data) {
-      const { estado, fechaActualizacion } = basurero;
+    console.log("Datos recibidos de la API de Google:", data);
 
-      const basureroExistente = await Basurero.findOne({ where: { fechaActualizacion } });
+    for (let basurero of data) {
+      const { fecha, distancia_promedio } = basurero;
+
+      const basureroExistente = await Basurero.findOne({ where: { fecha } });
 
       if (!basureroExistente) {
-        await Basurero.create({ estado, fechaActualizacion });
+        await Basurero.create({fecha, distancia_promedio });
       }
     }
 
@@ -26,4 +28,3 @@ router.get('/datos-sheet', async (req, res) => {
 });
 
 module.exports = router;
-

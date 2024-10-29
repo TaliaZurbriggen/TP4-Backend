@@ -5,12 +5,12 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true
       },
-      estado: {
+      distancia_promedio: {
         type: DataTypes.FLOAT,
         allowNull: false
       },
-      fechaActualizacion: {
-        type: DataTypes.DATE,
+      fecha: {
+        type: DataTypes.TEXT,
         allowNull: false
       }
     }, {
