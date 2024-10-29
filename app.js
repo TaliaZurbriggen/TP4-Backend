@@ -13,9 +13,10 @@ app.use('/api/basurero', basureroRoutes);
 app.use('/api/mails', mailRoutes);
 app.use('/api/notificaciones', notificacionesRoutes);
 
-sequelize.sync()
-  .then(() => console.log('Base de datos sincronizada'))
+sequelize.sync({ force: true })
+  .then(() => {
+    console.log('Base de datos sincronizada con estructura actualizada');
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
+  })
   .catch(error => console.error('Error al sincronizar la base de datos:', error));
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
