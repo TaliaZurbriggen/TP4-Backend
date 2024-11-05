@@ -1,16 +1,56 @@
+// routes/mails.js
 const express = require('express');
 const router = express.Router();
 const { Empleado } = require('../models');
 
+// Ruta para obtener todos los correos electrónicos
 router.get('/', async (req, res) => {
-  const mails = await Empleado.findAll();
-  res.json(mails);
+  try {
+    const correos = await Empleado.findAll();
+    res.status(200).json(correos);
+  } catch (error) {
+    console.error('Error al obtener correos:', error);
+    res.status(500).json({ error: 'Error al obtener correos' });
+  }
 });
 
+// Ruta para agregar un nuevo correo electrónico
 router.post('/', async (req, res) => {
-  const { email } = req.body;
-  const nuevoMail = await Empleado.create({ email });
-  res.status(201).json(nuevoMail);
+  try {
+    const { email } = req.body;
+
+    if (!email || typeof email !== 'string' || email.trim() === '') {
+      return res.status(400).json({ error: 'El email es requerido.' });
+    }
+
+    const nuevoEmpleado = await Empleado.create({ email });
+    res.status(201).json(nuevoEmpleado);
+  } catch (error) {
+    console.error('Error al agregar correo:', error);
+    res.status(500).json({ error: 'Error al agregar correo' });
+  }
+});
+
+// Ruta para eliminar un correo electrónico
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const correo = await Empleado.findByPk(id);
+
+    if (!correo) {
+      return res.status(404).json({ error: 'Correo no encontrado' });
+    }
+
+    await correo.destroy();
+    res.status(200).json({ message: 'Correo eliminado exitosamente' });
+  } catch (error) {
+    console.error('Error al eliminar correo:', error);
+    res.status(500).json({ error: 'Error al eliminar correo' });
+  }
 });
 
 module.exports = router;
+
+
+
+
