@@ -8,20 +8,22 @@ const app = express();
 
 // Configura CORS
 app.use(cors({
-    origin: 'http://localhost:3000', // Cambia esto según la URL de tu frontend
+    origin: 'http://localhost:3000', 
     methods: ['GET', 'POST', 'DELETE'],
 }));
 
 app.use(bodyParser.json());
 
 const mailRoutes = require('./routes/mails');
+const basureroRoutes = require('./routes/basurero'); 
 app.use('/api/mails', mailRoutes);
+app.use('/api/basurero', basureroRoutes);
 
 app.get('/', (req, res) => {
   res.send('Bienvenido a la API de gestión de correos.');
 });
 
-sequelize.sync({ force: false }) // Cambia a `false` en producción
+sequelize.sync({ force: false }) 
   .then(() => {
     console.log('Base de datos sincronizada con estructura actualizada');
     const PORT = process.env.PORT || 4000;
