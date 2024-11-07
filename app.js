@@ -18,6 +18,9 @@ const mailRoutes = require('./routes/mails');
 const basureroRoutes = require('./routes/basurero'); 
 app.use('/api/mails', mailRoutes);
 app.use('/api/basurero', basureroRoutes);
+const notificacionesRoutes = require('./routes/notificaciones');
+app.use('/api/notificaciones', notificacionesRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('Bienvenido a la API de gestión de correos.');
