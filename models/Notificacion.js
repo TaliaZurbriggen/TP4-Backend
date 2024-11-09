@@ -12,15 +12,15 @@ module.exports = (sequelize, DataTypes) => {
     idMail: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Empleado', // Nombre de la tabla relacionada
-        key: 'id' // Clave primaria de la tabla relacionada
+        model: 'Empleado', 
+        key: 'id' 
       }
     },
     idBasurero: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Basurero', // Nombre de la tabla relacionada
-        key: 'id' // Clave primaria de la tabla relacionada
+        model: 'Basurero', 
+        key: 'id' 
       }
     }
   }, {

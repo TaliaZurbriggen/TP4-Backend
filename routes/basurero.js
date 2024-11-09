@@ -10,7 +10,7 @@ router.get('/datos-sheet', async (req, res) => {
 
     console.log("Datos recibidos de la API de Google:", data);
 
-    // Procesamiento de los datos
+    
     for (let basurero of data) {
       const fecha = new Date(basurero.fecha);
       const distanciaPromedio = parseFloat(basurero.distancia_promedio);
@@ -29,9 +29,9 @@ router.get('/datos-sheet', async (req, res) => {
       }
     }
 
-    // Obtener todos los registros después de actualizar/insertar
+
     const allRecords = await Basurero.findAll();
-    res.status(200).json(allRecords); // Enviar todos los registros en formato JSON
+    res.status(200).json(allRecords); 
   } catch (error) {
     console.error('Error al obtener datos:', error);
     res.status(500).json({ error: 'Error al obtener datos o guardar en la base de datos' });

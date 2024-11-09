@@ -1,9 +1,8 @@
-// routes/mails.js
 const express = require('express');
 const router = express.Router();
 const { Empleado } = require('../models');
 
-// Ruta para obtener todos los correos electrónicos
+
 router.get('/', async (req, res) => {
   try {
     const correos = await Empleado.findAll();
@@ -14,7 +13,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Ruta para agregar un nuevo correo electrónico
+
 router.post('/', async (req, res) => {
   try {
     const { email } = req.body;
@@ -31,7 +30,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Ruta para eliminar un correo electrónico
+
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;

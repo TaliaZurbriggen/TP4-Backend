@@ -16,10 +16,10 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
-// Habilitar claves foráneas en SQLite
+
 sequelize.authenticate()
   .then(() => {
-    // Habilitar claves foráneas en SQLite
+    // Agrego esto para habilitar claves foráneas en SQLite, sino no me funciona
     sequelize.query('PRAGMA foreign_keys = ON;');
     console.log('Conexión establecida con éxito y claves foráneas habilitadas.');
   })

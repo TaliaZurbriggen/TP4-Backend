@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 // Rutas
 const mailRoutes = require('./routes/mails');
 const basureroRoutes = require('./routes/basurero'); 
-const notificacionesRoutes = require('./routes/notificaciones'); // Importa el módulo de notificaciones para iniciar el cron
+const notificacionesRoutes = require('./routes/notificaciones'); // Importamos el módulo de notificaciones para iniciar el cron
 
 app.use('/api/mails', mailRoutes);
 app.use('/api/basurero', basureroRoutes);
@@ -36,9 +36,9 @@ sequelize.sync({ force: false })
 
   app.get('/api/notificaciones', async (req, res) => {
     try {
-        // Obtener las notificaciones desde la base de datos
+        
         const notificaciones = await Notificacion.findAll();
-        res.json(notificaciones); // Enviar las notificaciones como respuesta JSON
+        res.json(notificaciones); 
     } catch (error) {
         console.error('Error al obtener las notificaciones:', error);
         res.status(500).send('Error al obtener las notificaciones');
