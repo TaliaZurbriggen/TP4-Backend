@@ -5,7 +5,7 @@ const { Basurero } = require('../models');
 
 router.get('/datos-sheet', async (req, res) => {
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbyTdMBSUv8lFQEf2sNnLDbHXVITURXDOex3FxXIg3C9vXkGdgWX1cUFHjDkr5tCbqrrmg/exec');
+    const response = await fetch('https://script.google.com/macros/s/AKfycbxyyE0bS500MPkZhtPFLus_mA_6la2ddGoJplPuzi7hXEIq7s2TX_qV76X2p9wD3XSk/exec');
     const data = await response.json();
 
     console.log("Datos recibidos de la API de Google:", data);

@@ -47,13 +47,14 @@ const sendNotificationEmails = async (nivelLlenadoActual, basureroId) => {
 
 const verificarNivelLlenado = async () => {
   try {
-    const limiteLlenado = 50;  
+    const limiteLlenado = 75;  
     const ultimoRegistro = await Basurero.findOne({
       order: [['fecha', 'DESC']],  
     });
 
     if (ultimoRegistro) {
-      const nivelLlenado = Math.min(Math.round((ultimoRegistro.distancia_promedio / 200) * 100), 100);
+      const nivelLlenado = Math.min(Math.round((ultimoRegistro.distancia_promedio / 32.7) * 100), 100);
+;
 
       // Si el nivel de llenado supera el límite, enviamos la notificación
       if (nivelLlenado >= limiteLlenado) {
