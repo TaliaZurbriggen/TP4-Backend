@@ -1,32 +1,32 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors'); // Mantén solo esta declaración
+const cors = require('cors');
 
 const { sequelize } = require('./models');
 
 const app = express();
 
-// Configura CORS
 app.use(cors({
-    origin: 'http://localhost:3000', 
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'DELETE'],
 }));
 
 app.use(bodyParser.json());
 
+// Rutas
 const mailRoutes = require('./routes/mails');
 const basureroRoutes = require('./routes/basurero'); 
+const notificacionesRoutes = require('./routes/notificaciones'); // Importa el módulo de notificaciones para iniciar el cron
+
 app.use('/api/mails', mailRoutes);
 app.use('/api/basurero', basureroRoutes);
-const notificacionesRoutes = require('./routes/notificaciones');
 app.use('/api/notificaciones', notificacionesRoutes);
-
 
 app.get('/', (req, res) => {
   res.send('Bienvenido a la API de gestión de correos.');
 });
 
-sequelize.sync({ force: false }) 
+sequelize.sync({ force: false })
   .then(() => {
     console.log('Base de datos sincronizada con estructura actualizada');
     const PORT = process.env.PORT || 4000;
@@ -34,6 +34,16 @@ sequelize.sync({ force: false })
   })
   .catch(error => console.error('Error al sincronizar la base de datos:', error));
 
+  app.get('/api/notificaciones', async (req, res) => {
+    try {
+        // Obtener las notificaciones desde la base de datos
+        const notificaciones = await Notificacion.findAll();
+        res.json(notificaciones); // Enviar las notificaciones como respuesta JSON
+    } catch (error) {
+        console.error('Error al obtener las notificaciones:', error);
+        res.status(500).send('Error al obtener las notificaciones');
+    }
+});
 
 
 

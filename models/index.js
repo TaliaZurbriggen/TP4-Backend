@@ -16,6 +16,17 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
+// Habilitar claves foráneas en SQLite
+sequelize.authenticate()
+  .then(() => {
+    // Habilitar claves foráneas en SQLite
+    sequelize.query('PRAGMA foreign_keys = ON;');
+    console.log('Conexión establecida con éxito y claves foráneas habilitadas.');
+  })
+  .catch(err => {
+    console.error('No se pudo conectar a la base de datos:', err);
+  });
+
 fs
   .readdirSync(__dirname)
   .filter(file => {
@@ -41,3 +52,4 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
+
