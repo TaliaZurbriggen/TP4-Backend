@@ -22,6 +22,11 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Basurero', 
         key: 'id' 
       }
+    },
+    fecha: {
+      type: DataTypes.DATE, 
+      allowNull: false,
+      defaultValue: DataTypes.NOW 
     }
   }, {
     tableName: 'notificacion',
@@ -35,5 +40,8 @@ module.exports = (sequelize, DataTypes) => {
 
   return Notificacion;
 };
+
+
+
 
   

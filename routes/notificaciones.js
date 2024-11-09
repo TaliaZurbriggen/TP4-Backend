@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 const { Notificacion, Basurero, Empleado } = require('../models');
-const cron = require('node-cron');  // Para programar tareas periódicas
+const cron = require('node-cron');  // Con esto programamos las tareas periódicas
+const { Sequelize } = require('sequelize'); 
+const { Op } = require('sequelize');
 
 
 const transporter = nodemailer.createTransport({
@@ -20,7 +22,7 @@ const sendNotificationEmails = async (nivelLlenadoActual, basureroId) => {
     const destinatarios = correos.map(correo => correo.email).join(',');
 
     const mailOptions = {
-      from: 'tobiasgasparotto@gmail.com',  // Correo de origen
+      from: 'tobiasgasparotto@gmail.com',  
       to: destinatarios,
       subject: 'Notificación de Llenado',
       text: `El nivel de llenado del basurero ha alcanzado ${nivelLlenadoActual}%. Por favor, revisa el sistema.`
@@ -29,7 +31,7 @@ const sendNotificationEmails = async (nivelLlenadoActual, basureroId) => {
     await transporter.sendMail(mailOptions);
     console.log('Correos enviados con éxito a:', destinatarios);
 
-    
+   
     for (const correo of correos) {
       await Notificacion.create({
         contenido: `Notificación de llenado: nivel alcanzado ${nivelLlenadoActual}%`,
@@ -51,7 +53,6 @@ const verificarNivelLlenado = async () => {
     });
 
     if (ultimoRegistro) {
-      
       const nivelLlenado = Math.min(Math.round((ultimoRegistro.distancia_promedio / 200) * 100), 100);
 
       // Si el nivel de llenado supera el límite, enviamos la notificación
@@ -64,21 +65,48 @@ const verificarNivelLlenado = async () => {
   }
 };
 
-// Cada 1 minuto se revisa si el nivel de llenado supero al límite que pusimos
+// Programar la verificación cada minuto
 cron.schedule('* * * * *', verificarNivelLlenado);
 
 
 router.get('/', async (req, res) => {
+  const { fechaInicio } = req.query;
+
   try {
-    const notificaciones = await Notificacion.findAll();
+    const where = {};
+
+    if (fechaInicio) {
+      where.fecha = {
+        [Op.gte]: fechaInicio 
+      };
+    }
+
+    const notificaciones = await Notificacion.findAll({
+      where,
+      include: [
+        {
+          model: Empleado,
+          attributes: ['email']
+        }
+      ],
+      order: [['fecha', 'DESC']]
+    });
+
+    if (notificaciones.length === 0) {
+      console.log('No se encontraron notificaciones');
+    } else {
+      console.log('Notificaciones encontradas:', notificaciones);
+    }
+
     return res.status(200).json(notificaciones);
   } catch (error) {
     console.error('Error al obtener las notificaciones:', error);
     return res.status(500).json({ error: 'Error al obtener las notificaciones.' });
   }
 });
-
 module.exports = router;
+
+
 
 
 

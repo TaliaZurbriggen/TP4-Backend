@@ -16,5 +16,9 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   });
 
+  Empleado.associate = function(models) {
+    Empleado.hasMany(models.Notificacion, { foreignKey: 'idMail' });
+  };
+
   return Empleado;
 };
