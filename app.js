@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 // Rutas
 const mailRoutes = require('./routes/mails');
 const basureroRoutes = require('./routes/basurero'); 
-const notificacionesRoutes = require('./routes/notificaciones'); // Importamos el módulo de notificaciones para iniciar el cron
+const notificacionesRoutes = require('./routes/notificaciones'); 
 
 app.use('/api/mails', mailRoutes);
 app.use('/api/basurero', basureroRoutes);
