@@ -53,8 +53,12 @@ const verificarNivelLlenado = async () => {
     });
 
     if (ultimoRegistro) {
-      const nivelLlenado = Math.min(Math.round((ultimoRegistro.distancia_promedio / 32.7) * 100), 100);
-;
+      
+      const nivelLlenado = (ultimoRegistro.distancia_promedio > 40) 
+        ? 100  
+        : Math.min(Math.round((1 - ultimoRegistro.distancia_promedio / 40) * 100), 100);  
+
+      console.log("Nivel de llenado calculado:", nivelLlenado);
 
       // Si el nivel de llenado supera el límite, enviamos la notificación
       if (nivelLlenado >= limiteLlenado) {
@@ -66,7 +70,7 @@ const verificarNivelLlenado = async () => {
   }
 };
 
-// Programar la verificación cada minuto
+
 cron.schedule('* * * * *', verificarNivelLlenado);
 
 
