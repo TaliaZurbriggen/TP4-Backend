@@ -48,22 +48,35 @@ const sendNotificationEmails = async (nivelLlenadoActual, basureroId) => {
 const verificarNivelLlenado = async () => {
   try {
     const limiteLlenado = 75;  
-    const ultimoRegistro = await Basurero.findOne({
-      order: [['fecha', 'DESC']],  
-    });
+    const response = await fetch('https://script.google.com/macros/s/AKfycbwxFFeoO1X_CIDQ8hQ06ac_l0aLmvk5Liimh57Qgdzya93w3HaALJQ4SpeGWzE0BVT_/exec');
 
-    if (ultimoRegistro) {
-      
-      const nivelLlenado = (ultimoRegistro.distancia_promedio > 40) 
-        ? 100  
-        : Math.min(Math.round((1 - ultimoRegistro.distancia_promedio / 40) * 100), 100);  
+    if (!response.ok) {
+      throw new Error(`Error al obtener datos de Google Sheets: ${response.statusText}`);
+    }
 
-      console.log("Nivel de llenado calculado:", nivelLlenado);
+    const data = await response.json();
+    
+    if (data.length === 0) {
+      console.log('No se encontraron datos en Google Sheets');
+      return;
+    }
 
-      // Si el nivel de llenado supera el límite, enviamos la notificación
-      if (nivelLlenado >= limiteLlenado) {
-        await sendNotificationEmails(nivelLlenado, ultimoRegistro.id);
-      }
+    // Obtén el último registro (asumiendo que los datos están en orden cronológico)
+    const ultimoRegistro = data[data.length - 1];
+
+    const nivelLlenado = (ultimoRegistro.distancia_promedio > 40) 
+      ? 100  // Basurero lleno
+      : Math.min(Math.round((1 - ultimoRegistro.distancia_promedio / 40) * 100), 100);
+
+    console.log("Nivel de llenado calculado:", nivelLlenado);
+
+    // Si el nivel de llenado supera el límite, enviamos la notificación
+    if (nivelLlenado >= limiteLlenado) {
+      await sendNotificationEmails(nivelLlenado, ultimoRegistro.id);
+    } else {
+      console.log('No se envía notificación: nivel de llenado por debajo del límite');
+      console.log('Nivel de llenado:', nivelLlenado);
+      console.log('Distancia promedio:', ultimoRegistro.distancia_promedio);
     }
   } catch (error) {
     console.error('Error al verificar el nivel de llenado:', error);
@@ -71,7 +84,7 @@ const verificarNivelLlenado = async () => {
 };
 
 
-cron.schedule('* * * * *', verificarNivelLlenado);
+cron.schedule('*/20 * * * * *', verificarNivelLlenado);
 
 
 router.get('/', async (req, res) => {

@@ -6,7 +6,7 @@ const { Basurero } = require('../models');
 
   const fetchDataAndUpdateDB = async () => {
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxyyE0bS500MPkZhtPFLus_mA_6la2ddGoJplPuzi7hXEIq7s2TX_qV76X2p9wD3XSk/exec');
+        const response = await fetch('https://script.google.com/macros/s/AKfycbwxFFeoO1X_CIDQ8hQ06ac_l0aLmvk5Liimh57Qgdzya93w3HaALJQ4SpeGWzE0BVT_/exec');
         const data = await response.json();
 
         for (let basurero of data) {
