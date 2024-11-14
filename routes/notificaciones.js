@@ -61,7 +61,7 @@ const verificarNivelLlenado = async () => {
       return;
     }
 
-    // Obtén el último registro (asumiendo que los datos están en orden cronológico)
+    // Obtenermos el último registro
     const ultimoRegistro = data[data.length - 1];
 
     const nivelLlenado = (ultimoRegistro.distancia_promedio > 40) 
