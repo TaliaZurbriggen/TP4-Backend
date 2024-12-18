@@ -10,8 +10,8 @@ const { Op } = require('sequelize');
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'tobiasgasparotto@gmail.com',  
-    pass: 'exdg cyle yeyj zjnu'         
+    user: '',  
+    pass: ''         
   }
 });
 

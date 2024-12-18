@@ -41,13 +41,14 @@ router.delete('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Correo no encontrado' });
     }
 
-    // Elimina las notificaciones asociadas al correo
+    
     await Notificacion.destroy({
       where: { idMail: id }
     });
     
 
-    // Luego, elimina el correo
+    
+    
     await correo.destroy();
     res.status(200).json({ message: 'Correo eliminado exitosamente' });
   } catch (error) {
